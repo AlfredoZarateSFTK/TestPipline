@@ -1,0 +1,20 @@
+name: Checkov Scan
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Checkov
+        run: pip install checkov
+
+      - name: Run Checkov scan
+        run: checkov -d terraform/
