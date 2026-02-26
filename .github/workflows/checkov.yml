@@ -20,9 +20,19 @@ jobs:
         run: checkov -d terraform/ -o json > checkov-report.json
         continue-on-error: true
 
-      - name: Upload Checkov Report
-        if: always()
-        uses: actions/upload-artifact@v4
+      - name: Extract failed checks
+        run: |
+          jq '.results.failed_checks | map({
+            check_id: .check_id,
+            rule: .check_name,
+            file: .file_path,
+            lines: .file_line_range,
+            resource: .resource,
+            code: (.code_block | map(.[1]) | join("\n"))
+          })' checkov-report.json > failed_checks_clean.json
+
+      - name: Upload report
+        uses: actions/upload-artifact@v3
         with:
           name: checkov-report
           path: checkov-report.json
