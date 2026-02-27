@@ -5,7 +5,7 @@ provider "aws" {
 resource "aws_s3_bucket" "bad_bucket" {
   bucket = "poc-checkov-bucket-123456"
 
-  acl = "public-read"
+  acl = "private"
 }
 
 resource "aws_security_group" "bad_sg" {

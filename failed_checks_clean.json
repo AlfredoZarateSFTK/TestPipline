@@ -1,0 +1,156 @@
+[
+  {
+    "check_id": "CKV_AWS_23",
+    "rule": "Ensure every security group and rule has a description",
+    "file": "/main.tf",
+    "lines": [
+      11,
+      21
+    ],
+    "resource": "aws_security_group.bad_sg",
+    "code": "resource \"aws_security_group\" \"bad_sg\" {\n\n  name        = \"allow_all\"\n\n  description = \"Allow all inbound traffic\"\n\n\n\n  ingress {\n\n    from_port   = 0\n\n    to_port     = 0\n\n    protocol    = \"-1\"\n\n    cidr_blocks = [\"0.0.0.0/0\"]\n\n  }\n\n}\n"
+  },
+  {
+    "check_id": "CKV_AWS_24",
+    "rule": "Ensure no security groups allow ingress from 0.0.0.0:0 to port 22",
+    "file": "/main.tf",
+    "lines": [
+      11,
+      21
+    ],
+    "resource": "aws_security_group.bad_sg",
+    "code": "resource \"aws_security_group\" \"bad_sg\" {\n\n  name        = \"allow_all\"\n\n  description = \"Allow all inbound traffic\"\n\n\n\n  ingress {\n\n    from_port   = 0\n\n    to_port     = 0\n\n    protocol    = \"-1\"\n\n    cidr_blocks = [\"0.0.0.0/0\"]\n\n  }\n\n}\n"
+  },
+  {
+    "check_id": "CKV_AWS_25",
+    "rule": "Ensure no security groups allow ingress from 0.0.0.0:0 to port 3389",
+    "file": "/main.tf",
+    "lines": [
+      11,
+      21
+    ],
+    "resource": "aws_security_group.bad_sg",
+    "code": "resource \"aws_security_group\" \"bad_sg\" {\n\n  name        = \"allow_all\"\n\n  description = \"Allow all inbound traffic\"\n\n\n\n  ingress {\n\n    from_port   = 0\n\n    to_port     = 0\n\n    protocol    = \"-1\"\n\n    cidr_blocks = [\"0.0.0.0/0\"]\n\n  }\n\n}\n"
+  },
+  {
+    "check_id": "CKV_AWS_277",
+    "rule": "Ensure no security groups allow ingress from 0.0.0.0:0 to port -1",
+    "file": "/main.tf",
+    "lines": [
+      11,
+      21
+    ],
+    "resource": "aws_security_group.bad_sg",
+    "code": "resource \"aws_security_group\" \"bad_sg\" {\n\n  name        = \"allow_all\"\n\n  description = \"Allow all inbound traffic\"\n\n\n\n  ingress {\n\n    from_port   = 0\n\n    to_port     = 0\n\n    protocol    = \"-1\"\n\n    cidr_blocks = [\"0.0.0.0/0\"]\n\n  }\n\n}\n"
+  },
+  {
+    "check_id": "CKV_AWS_260",
+    "rule": "Ensure no security groups allow ingress from 0.0.0.0:0 to port 80",
+    "file": "/main.tf",
+    "lines": [
+      11,
+      21
+    ],
+    "resource": "aws_security_group.bad_sg",
+    "code": "resource \"aws_security_group\" \"bad_sg\" {\n\n  name        = \"allow_all\"\n\n  description = \"Allow all inbound traffic\"\n\n\n\n  ingress {\n\n    from_port   = 0\n\n    to_port     = 0\n\n    protocol    = \"-1\"\n\n    cidr_blocks = [\"0.0.0.0/0\"]\n\n  }\n\n}\n"
+  },
+  {
+    "check_id": "CKV2_AWS_5",
+    "rule": "Ensure that Security Groups are attached to another resource",
+    "file": "/main.tf",
+    "lines": [
+      11,
+      21
+    ],
+    "resource": "aws_security_group.bad_sg",
+    "code": "resource \"aws_security_group\" \"bad_sg\" {\n\n  name        = \"allow_all\"\n\n  description = \"Allow all inbound traffic\"\n\n\n\n  ingress {\n\n    from_port   = 0\n\n    to_port     = 0\n\n    protocol    = \"-1\"\n\n    cidr_blocks = [\"0.0.0.0/0\"]\n\n  }\n\n}\n"
+  },
+  {
+    "check_id": "CKV2_AWS_62",
+    "rule": "Ensure S3 buckets should have event notifications enabled",
+    "file": "/main.tf",
+    "lines": [
+      5,
+      9
+    ],
+    "resource": "aws_s3_bucket.bad_bucket",
+    "code": "resource \"aws_s3_bucket\" \"bad_bucket\" {\n\n  bucket = \"poc-checkov-bucket-123456\"\n\n\n\n  acl = \"public-read\"\n\n}\n"
+  },
+  {
+    "check_id": "CKV2_AWS_61",
+    "rule": "Ensure that an S3 bucket has a lifecycle configuration",
+    "file": "/main.tf",
+    "lines": [
+      5,
+      9
+    ],
+    "resource": "aws_s3_bucket.bad_bucket",
+    "code": "resource \"aws_s3_bucket\" \"bad_bucket\" {\n\n  bucket = \"poc-checkov-bucket-123456\"\n\n\n\n  acl = \"public-read\"\n\n}\n"
+  },
+  {
+    "check_id": "CKV2_AWS_6",
+    "rule": "Ensure that S3 bucket has a Public Access block",
+    "file": "/main.tf",
+    "lines": [
+      5,
+      9
+    ],
+    "resource": "aws_s3_bucket.bad_bucket",
+    "code": "resource \"aws_s3_bucket\" \"bad_bucket\" {\n\n  bucket = \"poc-checkov-bucket-123456\"\n\n\n\n  acl = \"public-read\"\n\n}\n"
+  },
+  {
+    "check_id": "CKV_AWS_145",
+    "rule": "Ensure that S3 buckets are encrypted with KMS by default",
+    "file": "/main.tf",
+    "lines": [
+      5,
+      9
+    ],
+    "resource": "aws_s3_bucket.bad_bucket",
+    "code": "resource \"aws_s3_bucket\" \"bad_bucket\" {\n\n  bucket = \"poc-checkov-bucket-123456\"\n\n\n\n  acl = \"public-read\"\n\n}\n"
+  },
+  {
+    "check_id": "CKV_AWS_144",
+    "rule": "Ensure that S3 bucket has cross-region replication enabled",
+    "file": "/main.tf",
+    "lines": [
+      5,
+      9
+    ],
+    "resource": "aws_s3_bucket.bad_bucket",
+    "code": "resource \"aws_s3_bucket\" \"bad_bucket\" {\n\n  bucket = \"poc-checkov-bucket-123456\"\n\n\n\n  acl = \"public-read\"\n\n}\n"
+  },
+  {
+    "check_id": "CKV_AWS_20",
+    "rule": "S3 Bucket has an ACL defined which allows public READ access.",
+    "file": "/main.tf",
+    "lines": [
+      5,
+      9
+    ],
+    "resource": "aws_s3_bucket.bad_bucket",
+    "code": "resource \"aws_s3_bucket\" \"bad_bucket\" {\n\n  bucket = \"poc-checkov-bucket-123456\"\n\n\n\n  acl = \"public-read\"\n\n}\n"
+  },
+  {
+    "check_id": "CKV_AWS_18",
+    "rule": "Ensure the S3 bucket has access logging enabled",
+    "file": "/main.tf",
+    "lines": [
+      5,
+      9
+    ],
+    "resource": "aws_s3_bucket.bad_bucket",
+    "code": "resource \"aws_s3_bucket\" \"bad_bucket\" {\n\n  bucket = \"poc-checkov-bucket-123456\"\n\n\n\n  acl = \"public-read\"\n\n}\n"
+  },
+  {
+    "check_id": "CKV_AWS_21",
+    "rule": "Ensure all data stored in the S3 bucket have versioning enabled",
+    "file": "/main.tf",
+    "lines": [
+      5,
+      9
+    ],
+    "resource": "aws_s3_bucket.bad_bucket",
+    "code": "resource \"aws_s3_bucket\" \"bad_bucket\" {\n\n  bucket = \"poc-checkov-bucket-123456\"\n\n\n\n  acl = \"public-read\"\n\n}\n"
+  }
+]
