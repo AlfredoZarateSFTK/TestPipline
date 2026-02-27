@@ -5,6 +5,10 @@ on:
     branches: [ "main" ]
   pull_request:
 
+permissions:
+  contents: write
+  pull-requests: write
+
 jobs:
   scan:
     runs-on: ubuntu-latest
@@ -12,9 +16,16 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+          fetch-depth: 0
 
       - name: Install Checkov
         run: pip install checkov
+
+      # (Opcional pero robusto) asegurar jq
+      - name: Ensure jq is installed
+        run: sudo apt-get update && sudo apt-get install -y jq
 
       - name: Run Checkov Scan
         run: checkov -d terraform/ -o json > checkov-report.json
@@ -31,8 +42,63 @@ jobs:
             code: (.code_block | map(.[1]) | join("\n"))
           })' checkov-report.json > failed_checks_clean.json
 
-      - name: Upload report
+      - name: Count findings
+        id: count
+        run: echo "count=$(jq length failed_checks_clean.json)" >> $GITHUB_OUTPUT
+
+      - name: Upload reports
+        if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: checkov-report
-          path: checkov-report.json
+          name: checkov-reports
+          path: |
+            checkov-report.json
+            failed_checks_clean.json
+
+      # --- MODO B: rama + PR (primero placeholder para validar circuito) ---
+
+      - name: Configure git
+        if: steps.count.outputs.count != '0'
+        run: |
+          git config user.name "checkov-remediation-bot"
+          git config user.email "checkov-remediation-bot@users.noreply.github.com"
+
+      - name: Create remediation branch
+        if: steps.count.outputs.count != '0'
+        id: branch
+        run: |
+          BRANCH="remediation/checkov-${GITHUB_RUN_ID}"
+          echo "branch=$BRANCH" >> $GITHUB_OUTPUT
+          git checkout -b "$BRANCH"
+
+      # Placeholder: esto solo prueba que el PR se crea. Luego lo reemplazas por el agente real.
+      - name: Apply remediation changes (placeholder)
+        if: steps.count.outputs.count != '0'
+        run: |
+          echo "# remediation run ${GITHUB_RUN_ID}" >> terraform/REMEDIATION_LOG.md
+
+      - name: Commit changes
+        if: steps.count.outputs.count != '0'
+        run: |
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+            exit 0
+          fi
+          git commit -m "Auto-remediation: Checkov findings (run ${GITHUB_RUN_ID})"
+
+      - name: Push branch
+        if: steps.count.outputs.count != '0'
+        run: |
+          git push --set-upstream origin "${{ steps.branch.outputs.branch }}"
+
+      - name: Create PR
+        if: steps.count.outputs.count != '0'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh pr create \
+            --title "Auto-remediation: Checkov findings (run ${GITHUB_RUN_ID})" \
+            --body "This PR was automatically generated from Checkov scan results. See workflow artifacts: checkov-reports." \
+            --base main \
+            --head "${{ steps.branch.outputs.branch }}"
