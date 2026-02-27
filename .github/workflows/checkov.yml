@@ -71,11 +71,15 @@ jobs:
           echo "branch=$BRANCH" >> $GITHUB_OUTPUT
           git checkout -b "$BRANCH"
 
-      # Placeholder: esto solo prueba que el PR se crea. Luego lo reemplazas por el agente real.
-      - name: Apply remediation changes (placeholder)
+      - name: Apply remediation changes (S3 public ACL fix)
         if: steps.count.outputs.count != '0'
         run: |
-          echo "# remediation run ${GITHUB_RUN_ID}" >> terraform/REMEDIATION_LOG.md
+          if grep -q 'acl = "public-read"' terraform/main.tf; then
+            echo "Fixing public S3 ACL..."
+            sed -i 's/acl = "public-read"/acl = "private"/g' terraform/main.tf
+          else
+            echo "No public S3 ACL found."
+          fi
 
       - name: Commit changes
         if: steps.count.outputs.count != '0'
