@@ -92,13 +92,12 @@ jobs:
         run: |
           git push --set-upstream origin "${{ steps.branch.outputs.branch }}"
 
-      - name: Create PR
+      - name: Remediation summary
         if: steps.count.outputs.count != '0'
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh pr create \
-            --title "Auto-remediation: Checkov findings (run ${GITHUB_RUN_ID})" \
-            --body "This PR was automatically generated from Checkov scan results. See workflow artifacts: checkov-reports." \
-            --base main \
-            --head "${{ steps.branch.outputs.branch }}"
+          echo "## 🔐 Auto-remediation branch created" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Branch pushed:" >> $GITHUB_STEP_SUMMARY
+          echo "\`${{ steps.branch.outputs.branch }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Open a Pull Request manually into \`main\` to validate the fix." >> $GITHUB_STEP_SUMMARY
